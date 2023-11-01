@@ -86,7 +86,8 @@ stack:     equ     00ffh;
 exitaddr:  equ     o_wrmboot
 #endif
 
-include    ../bios.inc
+#include    ../include/bios.inc
+#include    ../include/ops.inc
 
 #ifdef ELFOS
 include    kernel.inc
@@ -184,13 +185,13 @@ new:       mov     r2,stack
 start:     ldi     high himem          ; get page of data segment
            phi     r9                  ; place into r9
 #ifdef ANYROM
-           ldi     0ch                ; form feed
            sep     scall               ; clear screen
 #ifdef ELFOS
-           dw      o_type
+           dw      o_inmsg
 #else
-           dw      f_type
+           dw      f_inmsg
 #endif
+           db      27,'[2J',0
 #endif
            ldi     high hello          ; address of signon message
            phi     rf                  ; place into r6
@@ -3030,4 +3031,3 @@ storage:   dw      0
 #endif
 
            end     start
-
